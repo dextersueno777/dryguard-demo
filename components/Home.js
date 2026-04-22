@@ -5,20 +5,27 @@ import SensorCard from "@/components/SensorCard";
 import StatusBanner from "@/components/StatusBanner";
 import WeatherScene from "@/components/WeatherScene";
 
-function DynamicGreeting({ timestamp }) {
-  let hour = new Date().getHours();
+function DynamicGreeting() {
+  const hour = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Manila",
+    hour: "numeric",
+    hour12: false
+  });
 
-  try {
-    const match = /^(\d{1,2}):(\d{2})/.exec(timestamp);
-    if (match) hour = parseInt(match[1], 10);
-  } catch (e) {}
+  const currentHour = parseInt(hour, 10);
 
   let greeting = "Hello";
-  if (hour < 12) greeting = "Magandang umaga";
-  else if (hour < 18) greeting = "Magandang hapon";
-  else greeting = "Magandang gabi";
 
-  // ✅ Get logged-in user from localStorage
+  if (currentHour >= 0 && currentHour < 12) {
+    greeting = "Magandang umaga";
+  } else if (currentHour === 12) {
+    greeting = "Magandang tanghali";
+  } else if (currentHour > 12 && currentHour < 18) {
+    greeting = "Magandang hapon";
+  } else {
+    greeting = "Magandang gabi";
+  }
+
   let username = "User";
   if (typeof window !== "undefined") {
     const stored = localStorage.getItem("user");
@@ -29,7 +36,6 @@ function DynamicGreeting({ timestamp }) {
     }
   }
 
-  // Optional: nicer names
   const nameMap = {
     admin: "Admin",
     dad: "Dad",
@@ -42,9 +48,12 @@ function DynamicGreeting({ timestamp }) {
 
   const displayName = nameMap[username] || username;
 
-  return <p>{greeting}, {displayName}! 🌸</p>;
+return (
+  <p>
+    {greeting}, {displayName}! 🌸
+  </p>
+);
 }
-
 export default function Home({ data, onToggleDemoMode }) {
   const safeData = data || {
     rain: false,
@@ -171,8 +180,7 @@ export default function Home({ data, onToggleDemoMode }) {
         </span>
       </div>
       <h1>DryGuard</h1>
-      <DynamicGreeting timestamp={safeData.timestamp} />
-
+      <DynamicGreeting />
       <div style={{ background: "#eef2ff", border: "2px solid #6366f1", borderRadius: "12px", padding: "12px", marginBottom: "12px" }}>
         {demoActive && (
           <div style={{ color: "#2563eb", fontWeight: 500, marginBottom: 4 }}>
