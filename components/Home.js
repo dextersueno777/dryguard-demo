@@ -305,35 +305,54 @@ export default function Home({ data, onToggleDemoMode }) {
       )}
 
       {/* Weather Scene */}
-      <div style={{ textAlign: "center", fontSize: "2.5rem", fontWeight: "bold", margin: "1rem 0" }}>
-        {safeData.weatherLabel === "RAINY" ? "🌧️ Rainy" : safeData.weatherLabel === "SUNNY" ? "☀️ Sunny" : safeData.weatherLabel === "BREEZY" ? "🌬️ Breezy" : "☁️ Cloudy"}
-      </div>
-      <WeatherScene weather={weather} isCoverDeployed={coverStatus === "deployed"} />
+<div style={{ textAlign: "center", fontSize: "2.5rem", fontWeight: "bold", margin: "1rem 0" }}>
+  {safeData.weatherLabel === "RAINY"
+    ? "🌧️ Rainy"
+    : safeData.weatherLabel === "SUNNY"
+    ? "☀️ Sunny"
+    : safeData.weatherLabel === "BREEZY"
+    ? "🌬️ Breezy"
+    : "☁️ Cloudy"}
+</div>
 
-      {/* Status Banner */}
-      <StatusBanner
-        status={systemStatus}
-        description={systemDescription}
-      />
+<WeatherScene weather={weather} isCoverDeployed={coverStatus === "deployed"} />
 
-      {/* Sensor Readings */}
-      <div className="grid">
-        <SensorCard label="Rain Value" value={rainValue} />
-        <SensorCard label="Threshold" value={rainThreshold} />
-        <SensorCard label="Rain Sensor" value={rain ? "🌧 Rain Detected" : "✓ No Rain"} />
-        <SensorCard label="Humidity" value={`${humidity}%`} />
-        <SensorCard label="Temperature" value={`${temperature}°C`} />
-        <SensorCard label="Cover Status" value={systemStatus} />
-      </div>
+{/* Status Banner */}
+<StatusBanner
+  status={systemStatus}
+  description={systemDescription}
+/>
 
-      <div style={{ marginTop: "12px", background: "#f1f5f9", borderRadius: "10px", padding: "10px", fontSize: "13px" }}>
-        <strong>System Status:</strong> {systemHealth} | <strong>Response Time:</strong> {safeData.responseTimeSec || 0}s | <strong>Last update:</strong> {secondsSinceUpdate}s ago | <strong>Sensor Sampling:</strong> {samplingIntervalSec}s interval | <strong>Safety:</strong> {safetyStatus} | <strong>Sensor Stability:</strong> ±{sensorVariance} variance
-      </div>
+{/* Sensor Readings */}
+<div className="grid">
+  <SensorCard label="Rain Value" value={rainValue} />
+  <SensorCard label="Threshold" value={rainThreshold} />
+  <SensorCard label="Rain Sensor" value={rain ? "🌧 Rain Detected" : "✓ No Rain"} />
+  <SensorCard label="Humidity" value={`${humidity}%`} />
+  <SensorCard label="Temperature" value={`${temperature}°C`} />
+  <SensorCard label="Cover Status" value={systemStatus} />
+</div>
 
- <p className="timestamp">
-  Last updated: {mounted ? phTime : ""} — refreshes every 1s
+<div
+  style={{
+    marginTop: "12px",
+    background: "#f1f5f9",
+    borderRadius: "10px",
+    padding: "10px",
+    fontSize: "13px"
+  }}
+>
+  <strong>System Status:</strong> {systemHealth} |{" "}
+  <strong>Response Time:</strong> {safeData.responseTimeSec || 0}s |{" "}
+  <strong>Last update:</strong> {secondsSinceUpdate}s ago |{" "}
+  <strong>Sensor Sampling:</strong> {samplingIntervalSec}s interval |{" "}
+  <strong>Safety:</strong> {safetyStatus} |{" "}
+  <strong>Sensor Stability:</strong> ±{sensorVariance} variance
+</div>
+
+<p className="timestamp">
+  Last updated: {mounted ? phTime : "--:--:--"} — refreshes every 1s
 </p>
-    </div>
+</div>
   );
 }
-
