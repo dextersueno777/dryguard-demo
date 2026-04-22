@@ -6,11 +6,24 @@ import StatusBanner from "@/components/StatusBanner";
 import WeatherScene from "@/components/WeatherScene";
 
 function DynamicGreeting() {
-  const now = new Date();
-  const phTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Manila" })
-  );
-  const currentHour = phTime.getHours();
+  const [currentHour, setCurrentHour] = useState(0);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const hour = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Manila",
+        hour: "numeric",
+        hour12: false
+      }).format(new Date());
+
+      setCurrentHour(parseInt(hour, 10));
+    };
+
+    updateTime(); // initial run
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   let greeting = "Hello";
 
@@ -53,6 +66,25 @@ function DynamicGreeting() {
   );
 }
 export default function Home({ data, onToggleDemoMode }) {
+  const [phTime, setPhTime] = useState("");
+  useEffect(() => {
+  const updateTime = () => {
+    const time = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Manila",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true
+    }).format(new Date());
+
+    setPhTime(time);
+  };
+
+  updateTime();
+  const interval = setInterval(updateTime, 1000);
+
+  return () => clearInterval(interval);
+}, []);
   const safeData = data || {
     rain: false,
     temperature: 28,
@@ -300,12 +332,8 @@ export default function Home({ data, onToggleDemoMode }) {
         <strong>System Status:</strong> {systemHealth} | <strong>Response Time:</strong> {safeData.responseTimeSec || 0}s | <strong>Last update:</strong> {secondsSinceUpdate}s ago | <strong>Sensor Sampling:</strong> {samplingIntervalSec}s interval | <strong>Safety:</strong> {safetyStatus} | <strong>Sensor Stability:</strong> ±{sensorVariance} variance
       </div>
 
-      <p className="timestamp">
-  Last updated: {
-    new Date().toLocaleTimeString("en-US", {
-      timeZone: "Asia/Manila"
-    })
-  } — refreshes every 1s
+   <p className="timestamp">
+  Last updated: {phTime} — refreshes every 1s
 </p>
     </div>
   );
