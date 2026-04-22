@@ -10,16 +10,11 @@ function DynamicGreeting() {
 
   useEffect(() => {
     const updateTime = () => {
-      const hour = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Manila",
-        hour: "numeric",
-        hour12: false
-      }).format(new Date());
-
-      setCurrentHour(parseInt(hour, 10));
+      const hour = new Date().getHours();
+      setCurrentHour(hour);
     };
 
-    updateTime(); // initial run
+    updateTime();
     const interval = setInterval(updateTime, 1000);
 
     return () => clearInterval(interval);
@@ -69,18 +64,12 @@ export default function Home({ data, onToggleDemoMode }) {
   const [phTime, setPhTime] = useState("");
   useEffect(() => {
   const updateTime = () => {
-    const time = new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Manila",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true
-    }).format(new Date());
-
+    const now = new Date();
+    const time = now.toLocaleTimeString();
     setPhTime(time);
   };
 
-  updateTime();
+  updateTime(); // ✅ OUTSIDE the function
   const interval = setInterval(updateTime, 1000);
 
   return () => clearInterval(interval);
