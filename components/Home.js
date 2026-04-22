@@ -60,20 +60,29 @@ function DynamicGreeting() {
     </p>
   );
 }
+
 export default function Home({ data, onToggleDemoMode }) {
   const [phTime, setPhTime] = useState("");
+  const [mounted, setMounted] = useState(false); // ✅ ADD THIS
+
+  // ✅ FIX: mount detection (prevents server wrong time)
   useEffect(() => {
-  const updateTime = () => {
-    const now = new Date();
-    const time = now.toLocaleTimeString();
-    setPhTime(time);
-  };
+    setMounted(true);
+  }, []);
 
-  updateTime(); // ✅ OUTSIDE the function
-  const interval = setInterval(updateTime, 1000);
+  // ✅ FIX: clock
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const time = now.toLocaleTimeString();
+      setPhTime(time);
+    };
 
-  return () => clearInterval(interval);
-}, []);
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   const safeData = data || {
     rain: false,
     temperature: 28,
@@ -321,8 +330,8 @@ export default function Home({ data, onToggleDemoMode }) {
         <strong>System Status:</strong> {systemHealth} | <strong>Response Time:</strong> {safeData.responseTimeSec || 0}s | <strong>Last update:</strong> {secondsSinceUpdate}s ago | <strong>Sensor Sampling:</strong> {samplingIntervalSec}s interval | <strong>Safety:</strong> {safetyStatus} | <strong>Sensor Stability:</strong> ±{sensorVariance} variance
       </div>
 
-   <p className="timestamp">
-  Last updated: {phTime} — refreshes every 1s
+ <p className="timestamp">
+  Last updated: {mounted ? phTime : ""} — refreshes every 1s
 </p>
     </div>
   );
