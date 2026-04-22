@@ -6,13 +6,11 @@ import StatusBanner from "@/components/StatusBanner";
 import WeatherScene from "@/components/WeatherScene";
 
 function DynamicGreeting() {
-  const hour = new Date().toLocaleString("en-US", {
-    timeZone: "Asia/Manila",
-    hour: "numeric",
-    hour12: false
-  });
-
-  const currentHour = parseInt(hour, 10);
+  const now = new Date();
+  const phTime = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Manila" })
+  );
+  const currentHour = phTime.getHours();
 
   let greeting = "Hello";
 
@@ -48,11 +46,11 @@ function DynamicGreeting() {
 
   const displayName = nameMap[username] || username;
 
-return (
-  <p>
-    {greeting}, {displayName}! 🌸
-  </p>
-);
+  return (
+    <p>
+      {greeting}, {displayName}! 🌸
+    </p>
+  );
 }
 export default function Home({ data, onToggleDemoMode }) {
   const safeData = data || {
