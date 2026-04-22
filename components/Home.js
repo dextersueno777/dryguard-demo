@@ -301,8 +301,12 @@ export default function Home({ data, onToggleDemoMode }) {
       </div>
 
       <p className="timestamp">
-        Last updated: {safeData.timestamp} — refreshes every 1s
-      </p>
+  Last updated: {
+    new Date().toLocaleTimeString("en-US", {
+      timeZone: "Asia/Manila"
+    })
+  } — refreshes every 1s
+</p>
     </div>
   );
 }
