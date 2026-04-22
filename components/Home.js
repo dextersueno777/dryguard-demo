@@ -72,17 +72,23 @@ export default function Home({ data, onToggleDemoMode }) {
 
   // ✅ FIX: clock
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const time = now.toLocaleTimeString();
-      setPhTime(time);
-    };
+  const updateTime = () => {
+    const time = new Intl.DateTimeFormat("en-PH", {
+      timeZone: "Asia/Manila",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true
+    }).format(new Date());
 
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
+    setPhTime(time);
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  updateTime();
+  const interval = setInterval(updateTime, 1000);
+
+  return () => clearInterval(interval);
+}, []);
   const safeData = data || {
     rain: false,
     temperature: 28,
